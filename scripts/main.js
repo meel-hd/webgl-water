@@ -45,7 +45,7 @@ window.onload = function() {
   var help = document.getElementById('help');
 
   function onresize() {
-    var width = innerWidth - help.clientWidth - 20;
+    var width = innerWidth - help.clientWidth / 2; //OLD: innerWidth - help.clientWidth - 20
     var height = innerHeight;
     gl.canvas.width = width * ratio;
     gl.canvas.height = height * ratio;

@@ -10,6 +10,7 @@
     -ms-user-select: none;
     -o-user-select: none;
     cursor: pointer;
+    pointer-events: none;
 }
 .toggler {
     padding-right: 20px;

@@ -21,6 +21,7 @@ ul {
 h1 {
   font: bold 30px/30px;
   text-align: center;
+  margin-left: -10px;
 }
 
 h2 {
@@ -44,12 +45,13 @@ canvas {
   position: absolute;
   right: 20px;
   bottom: 0;
-  width: 280px;
+  width: 300px;
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
   overflow: auto;
   background-color: #ffffff20;
   backdrop-filter: blur(10px);
+  z-index: 20;
   /* Desable select */
   -webkit-touch-callout: none;
   -webkit-user-select: none;
