@@ -14,6 +14,7 @@
     cursor: pointer;
     pointer-events: none;
 }
+
 .toggler {
     padding-right: 20px;
     padding-left: 20px;
@@ -23,9 +24,11 @@
     gap: 20px;
     align-items: center;
 }
+
 .retate {
     transform: rotate(180deg);
 }
+
 .controls {
     z-index: 20;
     position: absolute;
@@ -41,6 +44,32 @@
     justify-content: space-around;
     align-items: center;
 }
-.bg {
-    background-color: red;
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #ffffff20;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    width: 120px;
+    bottom: 160%;
+    left: 50%;
+    margin-left: -60px;
+    /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }
