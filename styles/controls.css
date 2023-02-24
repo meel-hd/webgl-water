@@ -1,0 +1,25 @@
+.hidden {
+    display: none;
+}
+
+.icon {
+    display: block;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    cursor: pointer;
+}
+.toggler {
+    padding-right: 20px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+}
+.retate {
+    transform: rotate(180deg);
+}
