@@ -7,17 +7,22 @@
  */
 
 function text2html(text) {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\n/g, "<br>");
 }
 
 function handleError(text) {
   var html = text2html(text);
-  if (html == 'WebGL not supported') {
-    html = 'Your browser does not support WebGL.<br>Please see\
+  if (html == "WebGL not supported") {
+    html =
+      'Your browser does not support WebGL.<br>Please see\
     <a href="http://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">\
     Getting a WebGL Implementation</a>.';
   }
-  var loading = document.getElementById('loading');
+  var loading = document.getElementById("loading");
   loading.innerHTML = html;
   loading.style.zIndex = 1;
 }
@@ -40,17 +45,17 @@ var gravity;
 var radius;
 var paused = false;
 
-window.onload = function() {
+window.onload = function () {
   var ratio = window.devicePixelRatio || 1;
-  var help = document.getElementById('help');
+  var help = document.getElementById("help");
 
   function onresize() {
     var width = innerWidth - help.clientWidth / 2; //OLD: innerWidth - help.clientWidth - 20
     var height = innerHeight;
     gl.canvas.width = width * ratio;
     gl.canvas.height = height * ratio;
-    gl.canvas.style.width = width + 'px';
-    gl.canvas.style.height = height + 'px';
+    gl.canvas.style.width = width + "px";
+    gl.canvas.style.height = height + "px";
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.matrixMode(gl.PROJECTION);
     gl.loadIdentity();
@@ -65,16 +70,18 @@ window.onload = function() {
   water = new Water();
   renderer = new Renderer();
   cubemap = new Cubemap({
-    xneg: document.getElementById('xneg'),
-    xpos: document.getElementById('xpos'),
-    yneg: document.getElementById('ypos'),
-    ypos: document.getElementById('ypos'),
-    zneg: document.getElementById('zneg'),
-    zpos: document.getElementById('zpos')
+    xneg: document.getElementById("xneg"),
+    xpos: document.getElementById("xpos"),
+    yneg: document.getElementById("ypos"),
+    ypos: document.getElementById("ypos"),
+    zneg: document.getElementById("zneg"),
+    zpos: document.getElementById("zpos"),
   });
 
   if (!water.textureA.canDrawTo() || !water.textureB.canDrawTo()) {
-    throw new Error('Rendering to floating-point textures is required but not supported');
+    throw new Error(
+      "Rendering to floating-point textures is required but not supported"
+    );
   }
 
   center = oldCenter = new GL.Vector(-0.4, -0.75, 0.2);
@@ -83,16 +90,23 @@ window.onload = function() {
   radius = 0.25;
 
   for (var i = 0; i < 20; i++) {
-    water.addDrop(Math.random() * 2 - 1, Math.random() * 2 - 1, 0.03, (i & 1) ? 0.01 : -0.01);
+    water.addDrop(
+      Math.random() * 2 - 1,
+      Math.random() * 2 - 1,
+      0.03,
+      i & 1 ? 0.01 : -0.01
+    );
   }
 
-  document.getElementById('loading').innerHTML = '';
+  document.getElementById("loading").innerHTML = "";
   onresize();
 
   var requestAnimationFrame =
     window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
-    function(callback) { setTimeout(callback, 0); };
+    function (callback) {
+      setTimeout(callback, 0);
+    };
 
   var prevTime = new Date().getTime();
   function animate() {
@@ -123,11 +137,18 @@ window.onload = function() {
     var tracer = new GL.Raytracer();
     var ray = tracer.getRayForPixel(x * ratio, y * ratio);
     var pointOnPlane = tracer.eye.add(ray.multiply(-tracer.eye.y / ray.y));
-    var sphereHitTest = GL.Raytracer.hitTestSphere(tracer.eye, ray, center, radius);
+    var sphereHitTest = GL.Raytracer.hitTestSphere(
+      tracer.eye,
+      ray,
+      center,
+      radius
+    );
     if (sphereHitTest) {
       mode = MODE_MOVE_SPHERE;
       prevHit = sphereHitTest.hit;
-      planeNormal = tracer.getRayForPixel(gl.canvas.width / 2, gl.canvas.height / 2).negative();
+      planeNormal = tracer
+        .getRayForPixel(gl.canvas.width / 2, gl.canvas.height / 2)
+        .negative();
     } else if (Math.abs(pointOnPlane.x) < 1 && Math.abs(pointOnPlane.z) < 1) {
       mode = MODE_ADD_DROPS;
       duringDrag(x, y);
@@ -152,7 +173,8 @@ window.onload = function() {
       case MODE_MOVE_SPHERE: {
         var tracer = new GL.Raytracer();
         var ray = tracer.getRayForPixel(x * ratio, y * ratio);
-        var t = -planeNormal.dot(tracer.eye.subtract(prevHit)) / planeNormal.dot(ray);
+        var t =
+          -planeNormal.dot(tracer.eye.subtract(prevHit)) / planeNormal.dot(ray);
         var nextHit = tracer.eye.add(ray.multiply(t));
         center = center.add(nextHit.subtract(prevHit));
         center.x = Math.max(radius - 1, Math.min(1 - radius, center.x));
@@ -179,48 +201,58 @@ window.onload = function() {
   }
 
   function isHelpElement(element) {
-    return element === help || element.parentNode && isHelpElement(element.parentNode);
+    return (
+      element === help ||
+      (element.parentNode && isHelpElement(element.parentNode))
+    );
   }
 
-  document.onmousedown = function(e) {
+  document.onmousedown = function (e) {
     if (!isHelpElement(e.target)) {
       e.preventDefault();
       startDrag(e.pageX, e.pageY);
     }
   };
 
-  document.onmousemove = function(e) {
+  document.onmousemove = function (e) {
     duringDrag(e.pageX, e.pageY);
   };
 
-  document.onmouseup = function() {
+  document.onmouseup = function () {
     stopDrag();
   };
 
-  document.ontouchstart = function(e) {
+  document.ontouchstart = function (e) {
     if (e.touches.length === 1 && !isHelpElement(e.target)) {
       e.preventDefault();
       startDrag(e.touches[0].pageX, e.touches[0].pageY);
     }
   };
 
-  document.ontouchmove = function(e) {
+  document.ontouchmove = function (e) {
     if (e.touches.length === 1) {
       duringDrag(e.touches[0].pageX, e.touches[0].pageY);
     }
   };
 
-  document.ontouchend = function(e) {
+  document.ontouchend = function (e) {
     if (e.touches.length == 0) {
       stopDrag();
     }
   };
 
-  document.onkeydown = function(e) {
-    if (e.which == ' '.charCodeAt(0)) paused = !paused;
-    else if (e.which == 'G'.charCodeAt(0)) useSpherePhysics = !useSpherePhysics;
-    else if (e.which == 'L'.charCodeAt(0) && paused) draw();
-  };
+  
+  // NOTE: Uncomment this to enable keyboard controls
+
+  // document.onkeydown = function (e) {
+  //   if (e.which == " ".charCodeAt(0)) {
+  //     let temp = paused;
+  //     paused = !temp;
+  //     togglePlayPause();
+  //   } else if (e.which == "G".charCodeAt(0))
+  //     useSpherePhysics = !useSpherePhysics;
+  //   else if (e.which == "L".charCodeAt(0) && paused) draw();
+  // };
 
   var frame = 0;
 
@@ -233,9 +265,18 @@ window.onload = function() {
       velocity = new GL.Vector();
     } else if (useSpherePhysics) {
       // Fall down with viscosity under water
-      var percentUnderWater = Math.max(0, Math.min(1, (radius - center.y) / (2 * radius)));
-      velocity = velocity.add(gravity.multiply(seconds - 1.1 * seconds * percentUnderWater));
-      velocity = velocity.subtract(velocity.unit().multiply(percentUnderWater * seconds * velocity.dot(velocity)));
+      var percentUnderWater = Math.max(
+        0,
+        Math.min(1, (radius - center.y) / (2 * radius))
+      );
+      velocity = velocity.add(
+        gravity.multiply(seconds - 1.1 * seconds * percentUnderWater)
+      );
+      velocity = velocity.subtract(
+        velocity
+          .unit()
+          .multiply(percentUnderWater * seconds * velocity.dot(velocity))
+      );
       center = center.add(velocity.multiply(seconds));
 
       // Bounce off the bottom
@@ -259,7 +300,10 @@ window.onload = function() {
   function draw() {
     // Change the light direction to the camera look vector when the L key is pressed
     if (GL.keys.L) {
-      renderer.lightDir = GL.Vector.fromAngles((90 - angleY) * Math.PI / 180, -angleX * Math.PI / 180);
+      renderer.lightDir = GL.Vector.fromAngles(
+        ((90 - angleY) * Math.PI) / 180,
+        (-angleX * Math.PI) / 180
+      );
       if (paused) renderer.updateCaustics(water);
     }
 

@@ -25,25 +25,15 @@ Released under the MIT license
     <div id="loading">Loading...</div>
     <div id="help">
       <div class="toggler" onclick="toggleHelp()">
-        <img
-          src="images/icons/arrow.svg"
-          class="icon retate"
-          id="arrow-icon"
-          width="20"
-          height="20"
-          alt=""
-        />
+        <img src="images/icons/arrow.svg" class="icon retate" id="arrow-icon" alt="" />
         <h1>Chillwater</h1>
       </div>
-      <div id="help-content">
+      <div class="hidden" id="help-content">
         <h2>Interactions:</h2>
         <ul>
           <li>Draw on the water to make ripples</li>
           <li>Drag the background to rotate the camera</li>
-          <li>Press SPACEBAR to pause and unpause</li>
           <li>Drag the sphere to move it around</li>
-          <li>Press the L key to set the light direction</li>
-          <li>Press the G key to toggle gravity</li>
         </ul>
         <h2>Features:</h2>
         <ul>
@@ -75,6 +65,20 @@ Released under the MIT license
             on Flickr</small
           >
         </p>
+      </div>
+    </div>
+    <div class="controls">
+      <div onclick="toggleGravity()">
+        <img class="icon" src="images/icons/world.svg" />
+      </div>
+      <div class="hidden" id="play-icon" onclick="togglePlayPause()">
+        <img class="icon" src="images/icons/play.svg" />
+      </div>
+      <div id="pause-icon" onclick="togglePlayPause()">
+        <img class="icon" src="images/icons/pause.svg" />
+      </div>
+      <div stylbe="background-color: aqua;" onclick="setLight()">
+        <img class="icon" src="images/icons/light.svg" />
       </div>
     </div>
     <img id="tiles" src="images/tiles.jpg" />
